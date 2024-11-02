@@ -1,7 +1,11 @@
 <script>
 import axios from "axios";
+import { VTextField } from "vuetify/components";
 
 export default {
+  components: {
+    VTextField,
+  },
   data() {
     return {
       city: "",
@@ -36,7 +40,7 @@ export default {
           this.city = "";
         })
         .catch((err) => {
-          this.error = "City not found";
+          this.error = "City not found!";
         });
     },
     removeCard(index) {
@@ -50,12 +54,20 @@ export default {
   <div class="wrap">
     <h1>Weather applications</h1>
     <p>Find the weather in {{ city.length === 0 ? "your city" : cityName }}</p>
-    <input v-model="city" @keyup.enter="getWeather" type="text" />
-    <p class="error">{{ error }}</p>
+    <v-text-field
+      v-model="city"
+      label="Enter City"
+      @keyup.enter="getWeather"
+      outlined
+      class="mb-3"
+      style="width: 50%; margin: auto"
+    ></v-text-field>
+    <p>{{ error }}</p>
     <button class="btn-enter" @click="getWeather" v-if="city !== ''">
       Get the weather
     </button>
     <button class="btn-enter" v-else>Enter the city</button>
+   
     <div class="cards">
       <div
         v-for="(city, index) of cities"
@@ -68,7 +80,8 @@ export default {
         <p>Temp: {{ city.temp }}</p>
         <p>Feels like: {{ city.feels_like }}</p>
 
-        <button class="btn-full_info"
+        <button
+          class="btn-full_info"
           @click="
             $router.push({ name: 'WeatherDetail', params: { city: city.name } })
           "
@@ -79,8 +92,7 @@ export default {
     </div>
   </div>
 </template>
-
-<style>
+<style skoped>
 .wrap {
   height: 600px;
   width: 1000px;
@@ -115,17 +127,18 @@ export default {
   background-color: dimgray;
 }
 .btn-enter {
-  background-color: yellow;
+  background-color: blue;
   border: none;
   width: 140px;
   height: 25px;
   border-radius: 5px;
 }
 .btn-enter:hover {
-  background-color: chocolate;
+  background-color: darkblue;
 }
 .error {
   color: red;
+  font-size: 20px;
   margin-top: 10px;
 }
 .show-temp {
@@ -155,7 +168,7 @@ export default {
 }
 .btn-full_info::before {
   position: absolute;
-  content: '';
+  content: "";
   top: -5px;
   left: 0px;
   width: 100%;

@@ -4,6 +4,8 @@ export default {
   data() {
     return {
       weatherData: null,
+      error: "",
+      
     };
   },
   computed: {
@@ -25,6 +27,13 @@ export default {
         })
         .catch((err) => {
           console.error("Error fetching detailed weather:", err);
+          if (err.response && err.response.status === 404) {
+            this.error =
+              "City not found! Please check that the input is correct.";
+          } else {
+            this.error =
+              "Сталася помилка при отриманні даних. Спробуйте пізніше.";
+          }
         });
     },
   },
@@ -32,6 +41,7 @@ export default {
 </script>
 
 <template>
+  <p class="error">{{ error }}</p>
   <div class="detail-wrap" v-if="weatherData">
     <h2>Weather Details for {{ city }}</h2>
     <img
@@ -39,17 +49,11 @@ export default {
       :src="`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`"
       alt="Weather Icon"
     />
-    <p>
-      Description: {{ weatherData.weather[0].description }}
-    </p>
+    <p>Description: {{ weatherData.weather[0].description }}</p>
     <p>Temperature: {{ weatherData.main.temp }}°C</p>
     <p>Fells like: {{ weatherData.main.feels_like }}°C</p>
-    <p>
-      Minimum temperature: {{ weatherData.main.temp_min }}°C
-    </p>
-    <p>
-      Maximum temperature: {{ weatherData.main.temp_max }}°C
-    </p>
+    <p>Minimum temperature: {{ weatherData.main.temp_min }}°C</p>
+    <p>Maximum temperature: {{ weatherData.main.temp_max }}°C</p>
     <p>Wind speed: {{ weatherData.wind.speed }}m/s</p>
     <p>Wind direction: {{ weatherData.wind.deg }}°</p>
     <p>Humidity: {{ weatherData.main.humidity }}%</p>
@@ -57,7 +61,7 @@ export default {
   </div>
 </template>
 
-<style>
+<style skoped>
 .detail-wrap {
   text-align: center;
   padding: 20px;
